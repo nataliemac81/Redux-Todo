@@ -1,10 +1,17 @@
 export const ADD_TODO = 'ADD_TODO';
+export const TOGGLE_TODO = 'TOGGLE_TODO';
 
 
+export function addTodo(task) {
+	return {
+		type: ADD_TODO, 
+		task
+	}
+}
 
-let nextTodoId = 0
-export const addTodo = text => ({
-  type: 'ADD_TODO',
-  id: nextTodoId++,
-  text
-})
+export function toggleTodo(id) {
+	return {
+		type: TOGGLE_TODO, 
+		id
+	}
+}
