@@ -1,59 +1,24 @@
-import React, { Component } from "react"
-import {connect} from "react-redux"
-import Todo from "./Todo"
-import { ADD_TODO, TOGGLE_TODO } from "../actions";
+import React from 'react'
+import PropTypes from 'prop-types'
+import Todo from './Todo'
 
-class TodoList extends Component{
-    constructor(props) {
-			super(props)
-			this.state = {
-				task: ""
-			}
-		}
+const TodoList = ({ todos, toggleTodo }) => (
+  <ul>
+    {todos.map(todo => (
+      <Todo key={todo.id} {...todo} onClick={() => toggleTodo(todo.id)} />
+    ))}
+  </ul>
+)
 
-		handleSubmit = (e) => {
-			e.preventDefault();
-			this.props.dispatch({
-				type: ADD_TODO,
-				task: this.state.task
-			})
-			e.target.reset();
-		}
-
-		handleChange = (e) => {
-			this.setState({
-				[e.target.name]: e.target.value
-			})
-		}
-
-		toggleTodo = (id) => {
-			this.props.dispatch({
-				type: TOGGLE_TODO,
-				id: id
-			})
-		}
-		
-		render() {
-			let todos = this.props.todos.map((value, index) => (
-				<Todo toggleTodo={this.toggleTodo} task={value.task} key={index.id}/>
-				))
-			return(
-				<div>
-				<form onSubmit={this.handleSubmit}>
-					<label htmlFor="task"> What needs to get done? </label>
-					<input type="text" name="task" id="task" onChange={this.handleChange}/>
-					<button>Add a Todo</button>
-				</form>
-					<ul>{todos}</ul>
-				</div>
-			)
-		}
+TodoList.propTypes = {
+  todos: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      completed: PropTypes.bool.isRequired,
+      text: PropTypes.string.isRequired
+    }).isRequired
+  ).isRequired,
+  toggleTodo: PropTypes.func.isRequired
 }
 
-const mapStateToProps = state => {
-  return {
-		todos: state.todos
-  }
-}
-
-export default connect(mapStateToProps)(TodoList)
+export default TodoList
